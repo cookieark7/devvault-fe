@@ -1,26 +1,228 @@
 @import "tailwindcss";
+@import "../styles/fonts.css";
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   Design Tokens (CSS Variables)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds */
+  --bg-main: #FFFFFF;
+  --bg-sidebar: #F7F7F5;
+  --bg-hover: #EFEFED;
+  --bg-subtle: #F1F1EF;
+  --bg-elevated: #FFFFFF;
+
+  /* Borders */
+  --border: #E9E9E7;
+  --border-focus: #B7B7B5;
+
+  /* Text */
+  --text-primary: #37352F;
+  --text-secondary: #787774;
+  --text-tertiary: #ACABA8;
+
+  /* Accent */
+  --accent: #2383E2;
+  --accent-hover: #1A6FC4;
+  --accent-muted: rgba(35, 131, 226, 0.1);
+  --selection: rgba(35, 131, 226, 0.28);
+
+  /* Content identity colors */
+  --snippet: #F59E0B;
+  --bookmark: #3B82F6;
+  --command: #10B981;
+  --prompt: #8B5CF6;
+  --tag: #EC4899;
+  --snippet-muted: rgba(245, 158, 11, 0.1);
+  --bookmark-muted: rgba(59, 130, 246, 0.1);
+  --command-muted: rgba(16, 185, 129, 0.1);
+  --prompt-muted: rgba(139, 92, 246, 0.1);
+
+  /* Semantic */
+  --success: #0F7B6C;
+  --success-muted: rgba(15, 123, 108, 0.1);
+  --error: #EB5757;
+  --error-muted: rgba(235, 87, 87, 0.1);
+  --warning: #DFAB01;
+  --warning-muted: rgba(223, 171, 1, 0.1);
 }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   Tailwind v4 Theme Tokens
+   ━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Color tokens mapped from CSS variables */
+  --color-bg-main: var(--bg-main);
+  --color-bg-sidebar: var(--bg-sidebar);
+  --color-bg-hover: var(--bg-hover);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-bg-elevated: var(--bg-elevated);
+
+  --color-border-base: var(--border);
+  --color-border-focus: var(--border-focus);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-muted: var(--accent-muted);
+
+  --color-snippet: var(--snippet);
+  --color-bookmark: var(--bookmark);
+  --color-command: var(--command);
+  --color-prompt-color: var(--prompt);
+  --color-tag-color: var(--tag);
+
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+
+  /* Font families */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+
+  /* Box shadows (Notion-style) */
+  --shadow-notion-menu: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+  --shadow-notion-card: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.05) 0px 2px 4px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   Base Layer
+   ━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html,
+  body {
+    background: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--selection);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   Custom Scrollbar
+   ━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+::-webkit-scrollbar {
+  width: 6px;
 }
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-focus);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   Focus Ring (accessibility)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Prevent layout shift from scrollbar appearing */
+html {
+  overflow-y: scroll;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   Knowledge Hub — Markdown rendering
+   ━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.dv-markdown {
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.7;
+}
+.dv-markdown > *:first-child { margin-top: 0; }
+.dv-markdown h1,
+.dv-markdown h2,
+.dv-markdown h3,
+.dv-markdown h4 {
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 1.6em 0 0.6em;
+  color: var(--text-primary);
+}
+.dv-markdown h1 { font-size: 1.9em; }
+.dv-markdown h2 { font-size: 1.5em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
+.dv-markdown h3 { font-size: 1.25em; }
+.dv-markdown h4 { font-size: 1.05em; }
+.dv-markdown p { margin: 0.8em 0; }
+.dv-markdown a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+.dv-markdown ul,
+.dv-markdown ol { margin: 0.8em 0; padding-left: 1.5em; }
+.dv-markdown li { margin: 0.3em 0; }
+.dv-markdown ul { list-style: disc; }
+.dv-markdown ol { list-style: decimal; }
+.dv-markdown blockquote {
+  margin: 1em 0;
+  padding: 0.2em 1em;
+  border-left: 3px solid var(--border-focus);
+  color: var(--text-secondary);
+}
+.dv-markdown hr { border: none; border-top: 1px solid var(--border); margin: 1.6em 0; }
+.dv-markdown code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.12em 0.35em;
+}
+.dv-markdown pre {
+  margin: 1em 0;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.dv-markdown pre code {
+  display: block;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 1em;
+  font-size: 0.85em;
+  line-height: 1.6;
+}
+.dv-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.92em;
+  display: block;
+  overflow-x: auto;
+}
+.dv-markdown th,
+.dv-markdown td { border: 1px solid var(--border); padding: 0.5em 0.75em; text-align: left; }
+.dv-markdown th { background: var(--bg-subtle); font-weight: 600; }
+.dv-markdown img { max-width: 100%; border-radius: 6px; }
+.dv-markdown input[type="checkbox"] { margin-right: 0.4em; }
