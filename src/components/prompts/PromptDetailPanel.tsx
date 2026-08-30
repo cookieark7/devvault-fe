@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Pencil, Trash2, Star, Copy } from "lucide-react";
+import { Sparkles, Pencil, Trash2, Star, Copy, Check } from "lucide-react";
 import TagPill from "@/components/common/ui/TagPill";
 import Button from "@/components/common/ui/Button";
-import CopyButton from "@/components/common/ui/CopyButton";
 import { formatDate, formatRelativeTime } from "@/lib/utils/format";
 import { cn } from "@/lib/utils/cn";
 import type { Prompt } from "@/lib/types";
@@ -23,6 +22,17 @@ export default function PromptDetailPanel({
   onFavorite,
 }: PromptDetailPanelProps) {
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(prompt.content);
+    } catch {
+      // Ignore clipboard failures (e.g. insecure context); feedback still shows.
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <div>
@@ -113,12 +123,12 @@ export default function PromptDetailPanel({
           <Button
             variant="primary"
             size="sm"
-            leftIcon={<Copy size={14} />}
-            onClick={() => {
-              navigator.clipboard.writeText(prompt.content);
-            }}
+            leftIcon={
+              copied ? <Check size={14} /> : <Copy size={14} />
+            }
+            onClick={handleCopyPrompt}
           >
-            Copy Prompt
+            {copied ? "Copied!" : "Copy Prompt"}
           </Button>
         </div>
         <div className="text-sm text-text-primary leading-relaxed whitespace-pre-wrap pr-28">
@@ -133,9 +143,9 @@ export default function PromptDetailPanel({
       </div>
 
       {/* Tags */}
-      {prompt.tags.length > 0 && (
+      {(prompt.tags ?? []).length > 0 && (
         <div className="flex gap-1.5 flex-wrap mb-6">
-          {prompt.tags.map((tag) => (
+          {(prompt.tags ?? []).map((tag) => (
             <TagPill key={tag.id} tag={tag} size="sm" />
           ))}
         </div>

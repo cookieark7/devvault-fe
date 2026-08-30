@@ -9,14 +9,17 @@ interface GlobalSearchBarProps {
   onSearch: (query: string) => void;
   isLoading?: boolean;
   placeholder?: string;
+  /** Seed value, e.g. from a `?q=` URL param. Only read on first render. */
+  initialValue?: string;
 }
 
 export default function GlobalSearchBar({
   onSearch,
   isLoading = false,
   placeholder = "Search...",
+  initialValue = "",
 }: GlobalSearchBarProps) {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(initialValue);
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 

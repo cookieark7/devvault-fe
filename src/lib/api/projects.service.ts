@@ -21,4 +21,15 @@ export const projectsService = {
   sync(): Promise<SyncSummary> {
     return apiClient<SyncSummary>("/projects/sync", { method: "POST" });
   },
+
+  uploadDoc(input: { project: string; relPath: string; content: string }): Promise<DocMeta> {
+    return apiClient<DocMeta>("/projects/docs", {
+      method: "PUT",
+      body: JSON.stringify(input),
+    });
+  },
+
+  deleteDoc(projectId: string, docId: string): Promise<void> {
+    return apiClient<void>(`/projects/${projectId}/docs/${docId}`, { method: "DELETE" });
+  },
 };

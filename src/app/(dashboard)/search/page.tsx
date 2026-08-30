@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import TopBar from "@/components/common/layout/TopBar";
 import GlobalSearchBar from "@/components/search/GlobalSearchBar";
@@ -13,15 +13,11 @@ function SearchPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { results, isLoading, search, clearResults } = useSearch();
-  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const initialQuery = searchParams.get("q") || "";
+  const [query, setQuery] = useState(initialQuery);
 
-  // Search on mount if initial query exists
-  useEffect(() => {
-    if (query) {
-      search(query);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // The initial search (from a `?q=` URL param) is driven by GlobalSearchBar,
+  // which is seeded with `initialValue` and fires `onSearch` on mount.
 
   const handleSearch = useCallback(
     (q: string) => {
@@ -55,6 +51,7 @@ function SearchPageInner() {
         <GlobalSearchBar
           onSearch={handleSearch}
           isLoading={isLoading}
+          initialValue={initialQuery}
           placeholder="Search snippets, bookmarks, commands, prompts..."
         />
         {results.length > 0 && !isLoading && (

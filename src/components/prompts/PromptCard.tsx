@@ -40,7 +40,7 @@ export default function PromptCard({
         <span className="text-xs text-text-secondary line-clamp-1 max-w-[200px] hidden md:block">
           {prompt.content.slice(0, 60)}
         </span>
-        {prompt.tags.slice(0, 1).map((tag) => (
+        {(prompt.tags ?? []).slice(0, 1).map((tag) => (
           <TagPill key={tag.id} tag={tag} size="sm" />
         ))}
         <button
@@ -102,7 +102,7 @@ export default function PromptCard({
 
       {/* Footer */}
       <div className="flex items-center gap-1.5 mt-3">
-        {prompt.tags.slice(0, 2).map((tag) => (
+        {(prompt.tags ?? []).slice(0, 2).map((tag) => (
           <TagPill key={tag.id} tag={tag} size="sm" />
         ))}
         <div className="flex-1" />

@@ -1,8 +1,13 @@
 "use client";
 
-import { BookOpen } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { BookOpen, Trash2 } from "lucide-react";
 import MarkdownView from "@/components/markdown/MarkdownView";
+import Button from "@/components/common/ui/Button";
+import { projectsService } from "@/lib/api";
 import { useDocContent, useProjectTree } from "@/lib/hooks/useProjects";
+import { ROUTES } from "@/lib/constants/routes";
 import DocTree from "./DocTree";
 
 export default function ProjectWorkspace({
@@ -12,8 +17,26 @@ export default function ProjectWorkspace({
   projectId: string;
   docId?: string;
 }) {
+  const router = useRouter();
   const { data, isLoading: treeLoading, error: treeError } = useProjectTree(projectId);
   const { doc, isLoading: docLoading, error: docError } = useDocContent(projectId, docId);
+
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const handleDelete = async () => {
+    if (!docId) return;
+    setIsDeleting(true);
+    setDeleteError(null);
+    try {
+      await projectsService.deleteDoc(projectId, docId);
+      router.push(ROUTES.project(projectId));
+    } catch (err: any) {
+      setDeleteError(err?.message || "Failed to delete document.");
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div className="flex">
@@ -47,7 +70,36 @@ export default function ProjectWorkspace({
           {docId && docError && <p className="text-sm text-error">{docError}</p>}
           {docId && doc && (
             <>
-              <p className="mb-4 font-mono text-xs text-text-tertiary">{doc.relPath}</p>
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <p className="min-w-0 truncate font-mono text-xs text-text-tertiary">{doc.relPath}</p>
+                {confirmDelete ? (
+                  <div className="flex flex-shrink-0 items-center gap-2">
+                    <span className="text-xs text-text-secondary">Delete this document?</span>
+                    <Button variant="danger" size="sm" onClick={handleDelete} disabled={isDeleting}>
+                      {isDeleting ? "Deleting…" : "Confirm"}
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => setConfirmDelete(false)}
+                      disabled={isDeleting}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    leftIcon={<Trash2 size={14} />}
+                    onClick={() => setConfirmDelete(true)}
+                    className="flex-shrink-0"
+                  >
+                    Delete
+                  </Button>
+                )}
+              </div>
+              {deleteError && <p className="mb-3 text-sm text-error">{deleteError}</p>}
               <MarkdownView content={doc.content} />
             </>
           )}
