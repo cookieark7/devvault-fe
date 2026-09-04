@@ -226,3 +226,18 @@ html {
 .dv-markdown th { background: var(--bg-subtle); font-weight: 600; }
 .dv-markdown img { max-width: 100%; border-radius: 6px; }
 .dv-markdown input[type="checkbox"] { margin-right: 0.4em; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━
+   Homepage — typewriter cursor
+   ━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+@keyframes dv-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.dv-cursor-blink {
+  animation: dv-blink 1s steps(2, start) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dv-cursor-blink { animation: none; }
+}
