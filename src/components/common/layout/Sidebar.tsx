@@ -10,13 +10,13 @@ import {
   Sparkles,
   Tag,
   Search,
-  Settings,
   BookOpen,
   KeyRound,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { ROUTES } from "@/lib/constants/routes";
+import UserMenu from "./UserMenu";
 
 interface NavItem {
   label: string;
@@ -91,14 +91,33 @@ const sections: { header?: string; items: NavItem[] }[] = [
   },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  /**
+   * "desktop" pins the rail and hides it below lg. "drawer" fills the mobile
+   * drawer that already supplies its own fixed 240px shell — without this the
+   * shared `hidden lg:flex` made the open drawer render completely blank.
+   */
+  variant?: "desktop" | "drawer";
+  /** Called after a nav item is chosen, so the drawer can close itself. */
+  onNavigate?: () => void;
+}
+
+export default function Sidebar({ variant = "desktop", onNavigate }: SidebarProps) {
   const pathname = usePathname();
+  const isDrawer = variant === "drawer";
 
   const isActive = (item: NavItem) =>
     item.exactMatch ? pathname === item.route : pathname.startsWith(item.route);
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-[240px] bg-bg-sidebar flex-col border-r border-border-base z-30 hidden lg:flex">
+    <aside
+      className={cn(
+        "bg-bg-sidebar flex-col border-border-base",
+        isDrawer
+          ? "flex h-full w-full"
+          : "fixed left-0 top-0 h-screen w-[240px] border-r z-30 hidden lg:flex"
+      )}
+    >
       {/* Brand */}
       <div className="px-3 pt-4 pb-2">
         <div className="flex items-center">
@@ -113,13 +132,16 @@ export default function Sidebar() {
       <div className="px-2 pb-2">
         <Link
           href={ROUTES.search}
+          onClick={onNavigate}
           className="flex items-center gap-2 w-full px-2 py-1.5 rounded text-xs text-text-secondary hover:bg-bg-hover transition-colors duration-100 cursor-pointer"
         >
           <Search size={14} className="text-text-tertiary" />
           <span className="flex-1">Search...</span>
-          <kbd className="text-xs bg-bg-hover rounded px-1.5 py-0.5 text-text-tertiary">
-            ⌘K
-          </kbd>
+          {!isDrawer && (
+            <kbd className="text-xs bg-bg-hover rounded px-1.5 py-0.5 text-text-tertiary">
+              ⌘K
+            </kbd>
+          )}
         </Link>
       </div>
 
@@ -140,6 +162,7 @@ export default function Sidebar() {
                 <Link
                   key={item.route}
                   href={item.route}
+                  onClick={onNavigate}
                   className={cn(
                     "flex items-center gap-2 w-full rounded px-2 py-1.5 text-sm",
                     "transition-colors duration-100",
@@ -167,18 +190,8 @@ export default function Sidebar() {
       </nav>
 
       {/* Bottom user section */}
-      <div className="border-t border-border-base px-2 py-3">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 bg-bg-hover rounded-full text-xs font-medium text-text-secondary flex items-center justify-center">
-            U
-          </div>
-          <span className="text-sm text-text-primary font-medium flex-1 truncate">
-            User
-          </span>
-          <button className="text-text-secondary hover:text-text-primary hover:bg-bg-hover rounded p-1 transition-colors duration-100">
-            <Settings size={15} />
-          </button>
-        </div>
+      <div className="border-t border-border-base px-2 py-2">
+        <UserMenu onNavigate={onNavigate} />
       </div>
     </aside>
   );

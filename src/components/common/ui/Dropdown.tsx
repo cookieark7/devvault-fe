@@ -17,12 +17,15 @@ interface DropdownProps {
   trigger: React.ReactNode;
   items: DropdownItem[];
   align?: "left" | "right";
+  /** Which way the menu opens. Use "top" near the bottom of the viewport. */
+  side?: "bottom" | "top";
 }
 
 export default function Dropdown({
   trigger,
   items,
   align = "left",
+  side = "bottom",
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -56,7 +59,8 @@ export default function Dropdown({
             exit={{ opacity: 0, scale: 0.97, y: 4 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
             className={cn(
-              "absolute top-full mt-1 z-50 min-w-[160px]",
+              "absolute z-50 min-w-[160px]",
+              side === "top" ? "bottom-full mb-1" : "top-full mt-1",
               "bg-bg-elevated border border-border-base rounded-md shadow-notion-menu",
               "py-1",
               align === "left" ? "left-0" : "right-0"

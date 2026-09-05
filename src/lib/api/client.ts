@@ -76,7 +76,13 @@ export async function apiClient<T>(endpoint: string, options: FetchOptions = {})
 
   let response = await doFetch();
 
-  if (response.status === 401) {
+  // A 401 from the auth endpoints *is* the answer — bad credentials, or a
+  // refresh token that is genuinely dead. Running the refresh-and-retry path on
+  // those replaced the server's real message ("Invalid credentials.") with a
+  // generic "Unauthorized", so a mistyped password read as an expired session.
+  const isAuthEndpoint = /^\/auth\/(login|register|refresh)\b/.test(endpoint);
+
+  if (response.status === 401 && !isAuthEndpoint) {
     const refreshed = await refreshAccessToken();
     if (refreshed) {
       response = await doFetch(); // retry once
