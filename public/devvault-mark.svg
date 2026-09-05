@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="DevVault logo mark">
+  <defs>
+    <!-- Very subtle edge irregularity to keep the hand-stencilled feel without
+         making the mark fuzzy at favicon/app-icon sizes. -->
+    <filter id="stencil" x="-8%" y="-8%" width="116%" height="116%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.032" numOctaves="2" seed="17" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <clipPath id="leftFace">
+      <path d="M112 170 L246 106 L246 382 L112 316 Z"/>
+    </clipPath>
+
+    <clipPath id="topFace">
+      <path d="M112 170 L246 106 L400 166 L265 230 Z"/>
+    </clipPath>
+  </defs>
+
+  <g fill="currentColor" stroke="currentColor" stroke-linejoin="round" stroke-linecap="round"
+     color="#232323" filter="url(#stencil)">
+    <!-- Top face -->
+    <path d="M112 170 L246 106 L400 166 L265 230 Z" stroke-width="10"/>
+
+    <!-- Left face -->
+    <path d="M112 170 L265 230 L265 392 L112 316 Z" stroke-width="10"/>
+
+    <!-- Front face: intentionally hollow/transparent so the mark works on any background -->
+    <path d="M265 230 L400 166 L400 324 L265 392 Z"
+          fill="none" stroke-width="12"/>
+
+    <!-- Two subtle 'knowledge slots' -->
+    <path d="M306 275 L355 252" fill="none" stroke-width="18"/>
+    <path d="M306 329 L355 306" fill="none" stroke-width="18"/>
+
+    <!-- Sparse stencil scratches, clipped to dark faces -->
+    <g opacity=".23" fill="none" stroke-width="5">
+      <g clip-path="url(#topFace)">
+        <path d="M132 176 L244 124 M160 191 L283 133 M212 196 L323 146 M259 207 L361 158"/>
+        <path d="M178 131 L274 173 M219 117 L320 160 M264 121 L357 157"/>
+      </g>
+      <g clip-path="url(#leftFace)">
+        <path d="M126 194 L244 246 M126 225 L244 278 M126 257 L244 309 M126 290 L244 341"/>
+        <path d="M150 175 L126 292 M183 161 L150 322 M214 146 L178 340 M241 132 L208 355"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -10,6 +10,7 @@ import FormAlert from "@/components/common/ui/FormAlert";
 import { useAuth } from "@/lib/contexts/AuthContext";
 import { ROUTES } from "@/lib/constants/routes";
 import { toAuthError } from "@/lib/utils/authErrors";
+import Logo from "@/components/common/ui/Logo";
 
 const MIN_PASSWORD = 8;
 
@@ -95,7 +96,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-sm bg-bg-main border border-border-base rounded-md shadow-notion-menu p-8">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <div className="w-5 h-5 bg-text-primary rounded-sm" />
+          <Logo size={24} className="-ml-0.5" />
           <span className="text-sm font-semibold text-text-primary ml-2">
             DevVault
           </span>

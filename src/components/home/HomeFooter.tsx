@@ -1,4 +1,5 @@
 import { HomeCtas } from "./Hero";
+import Logo from "@/components/common/ui/Logo";
 
 export default function HomeFooter() {
   return (
@@ -15,7 +16,7 @@ export default function HomeFooter() {
       <div className="border-t border-border-base">
         <div className="max-w-[1100px] mx-auto px-6 h-12 flex items-center justify-between text-xs text-text-tertiary">
           <span className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 bg-text-primary rounded-sm" />
+            <Logo size={18} />
             <span className="font-semibold text-text-secondary">DevVault</span>
           </span>
           <span>Web · CLI · Chrome extension · MCP server</span>

@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { ROUTES } from "@/lib/constants/routes";
 import { useAuth } from "@/lib/contexts/AuthContext";
+import Logo from "@/components/common/ui/Logo";
 
 const navLink =
   "px-3 py-1.5 rounded text-sm text-text-secondary hover:text-text-primary hover:bg-bg-hover transition-colors duration-100";
@@ -17,7 +18,7 @@ export default function HomeNav() {
       <div className="max-w-[1100px] mx-auto px-6 h-14 flex items-center justify-between">
         {/* Brand mark — same treatment as the auth cards */}
         <Link href="/" className="flex items-center gap-2">
-          <span className="w-5 h-5 bg-text-primary rounded-sm" />
+          <Logo size={24} className="-ml-0.5" />
           <span className="text-sm font-semibold text-text-primary">DevVault</span>
         </Link>
 

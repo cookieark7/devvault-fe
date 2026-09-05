@@ -18,6 +18,14 @@ const SLOT_WORDS = [
 ] as const;
 const WORDS = SLOT_WORDS.map((w) => w.word);
 
+// Real commands from the CLI, cycled so the line keeps demonstrating the tool
+// instead of showing one static install string.
+const CLI_COMMANDS = [
+  "npm install -g devvault-cli",
+  "dv history",
+  'dv search "docker"',
+] as const;
+
 const item = {
   hidden: { opacity: 0, y: 8 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: "easeOut" as const } },
@@ -54,6 +62,29 @@ export function HomeCtas({ className }: { className?: string }) {
         </>
       )}
     </div>
+  );
+}
+
+/** Types the CLI commands one after another, forever. */
+function InstallLine() {
+  const { text, phase } = useTypewriter(CLI_COMMANDS, {
+    typeMs: 58,
+    holdMs: 2000,
+    gapMs: 500,
+  });
+
+  return (
+    // Fixed height so the cycling line never nudges the layout.
+    <p className="flex h-5 items-center justify-center font-mono text-xs text-text-tertiary">
+      <span className="mr-1.5 select-none text-text-tertiary/70">$</span>
+      <span className="whitespace-pre text-text-secondary">{text}</span>
+      <span
+        className={cn(
+          "ml-px inline-block h-[1.05em] w-[2px] bg-text-secondary align-[-0.2em]",
+          phase !== "typing" && "dv-cursor-blink"
+        )}
+      />
+    </p>
   );
 }
 
@@ -106,12 +137,9 @@ export default function Hero() {
           <HomeCtas className="justify-center mt-8" />
         </motion.div>
 
-        <motion.p
-          variants={item}
-          className="mt-5 text-xs text-text-tertiary font-mono"
-        >
-          npm install -g devvault-cli
-        </motion.p>
+        <motion.div variants={item} className="mt-5">
+          <InstallLine />
+        </motion.div>
       </motion.div>
     </section>
   );

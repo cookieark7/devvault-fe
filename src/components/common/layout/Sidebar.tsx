@@ -17,6 +17,7 @@ import {
 import { cn } from "@/lib/utils/cn";
 import { ROUTES } from "@/lib/constants/routes";
 import UserMenu from "./UserMenu";
+import Logo from "@/components/common/ui/Logo";
 
 interface NavItem {
   label: string;
@@ -121,7 +122,7 @@ export default function Sidebar({ variant = "desktop", onNavigate }: SidebarProp
       {/* Brand */}
       <div className="px-3 pt-4 pb-2">
         <div className="flex items-center">
-          <div className="w-5 h-5 bg-text-primary rounded-sm" />
+          <Logo size={24} className="-ml-0.5" />
           <span className="text-sm font-semibold text-text-primary ml-2">
             DevVault
           </span>
